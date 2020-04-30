@@ -8,7 +8,6 @@ var velocity: Vector3 = Vector3.ZERO
 onready var ray_cast_group: Spatial = $RayCasts
 onready var ray_casts: Array = $RayCasts.get_children()
 
-
 func _physics_process(delta) -> void:
 	var move: Vector3 = Vector3.ZERO
 	if Input.is_action_pressed("ui_left"):
@@ -22,6 +21,13 @@ func _physics_process(delta) -> void:
 	
 	move = move.normalized() * move_speed
 	translation = translation + get_valid_move(move)
+	
+	var initial_transform: Transform = $MeshInstance.get_transform()
+	var final_transform: Transform = Transform(initial_transform.basis, $MeshInstance.translation + move)
+	if initial_transform != final_transform:
+		var rotated_transform: Transform = initial_transform.looking_at(final_transform.origin, Vector3.UP)
+		var rotated_quat: Quat = Quat(initial_transform.basis).slerp(rotated_transform.basis, delta*5)
+		$MeshInstance.set_transform(Transform(rotated_quat, initial_transform.origin))
 	
 	velocity += gravity * delta 
 	velocity = move_and_slide(velocity)
