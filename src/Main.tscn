@@ -80,6 +80,7 @@ shape = SubResource( 2 )
 [node name="3DText" type="Spatial" parent="."]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 1, -4.25656, 1.94011, 0 )
 script = ExtResource( 4 )
+is_billboard = true
 
 [node name="Viewport" type="Viewport" parent="3DText"]
 size = Vector2( 280, 180 )
