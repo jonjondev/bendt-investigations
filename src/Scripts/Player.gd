@@ -22,15 +22,18 @@ func _physics_process(delta) -> void:
 	move = move.normalized() * move_speed
 	translation = translation + get_valid_move(move)
 	
-	var initial_transform: Transform = $MeshInstance.get_transform()
-	var final_transform: Transform = Transform(initial_transform.basis, $MeshInstance.translation + move)
+	var initial_transform: Transform = $Character.get_transform()
+	var final_transform: Transform = Transform(initial_transform.basis, $Character.translation + move)
 	if initial_transform != final_transform:
 		var rotated_transform: Transform = initial_transform.looking_at(final_transform.origin, Vector3.UP)
 		var rotated_quat: Quat = Quat(initial_transform.basis).slerp(rotated_transform.basis, delta*5)
-		$MeshInstance.set_transform(Transform(rotated_quat, initial_transform.origin))
+		$Character.set_transform(Transform(rotated_quat, initial_transform.origin))
 	
 	velocity += gravity * delta 
 	velocity = move_and_slide(velocity)
+	
+	var anim: String = "run" if move.length() > 0 else "idle"
+	$Character/AnimationPlayer.play(anim)
 
 
 func get_valid_move(move: Vector3) -> Vector3:
