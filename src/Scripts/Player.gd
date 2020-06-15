@@ -1,7 +1,7 @@
 extends KinematicBody
 
-var move_speed: float = 0.05
-var extent_offset: float = 0.25
+var move_speed: float = 0.02
+var extent_offset: float = 0.3
 var gravity: Vector3 = Vector3(0, -10, 0)
 var velocity: Vector3 = Vector3.ZERO
 
@@ -32,8 +32,10 @@ func _physics_process(delta) -> void:
 	velocity += gravity * delta 
 	velocity = move_and_slide(velocity)
 	
-	var anim: String = "run" if move.length() > 0 else "idle"
-	$Character/AnimationPlayer.play(anim)
+	var anim: String = "walk" if move.length() > 0 else "idle"
+	#$Character/AnimationPlayer.play(anim)
+	var state_machine = $Character/AnimationTree["parameters/playback"]
+	state_machine.travel(anim)
 
 
 func get_valid_move(move: Vector3) -> Vector3:
