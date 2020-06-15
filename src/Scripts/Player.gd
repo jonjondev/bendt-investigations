@@ -1,12 +1,14 @@
 extends KinematicBody
 
-var move_speed: float = 0.02
+var walk_speed: float = 0.02
+var run_speed: float = 0.07
 var extent_offset: float = 0.3
 var gravity: Vector3 = Vector3(0, -10, 0)
 var velocity: Vector3 = Vector3.ZERO
 
 onready var ray_cast_group: Spatial = $RayCasts
 onready var ray_casts: Array = $RayCasts.get_children()
+onready var anim_state_machine: AnimationNodeStateMachinePlayback = $Character/AnimationTree["parameters/playback"]
 
 func _physics_process(delta) -> void:
 	var move: Vector3 = Vector3.ZERO
@@ -19,7 +21,7 @@ func _physics_process(delta) -> void:
 	if Input.is_action_pressed("ui_down"):
 		move.z = 1
 	
-	move = move.normalized() * move_speed
+	move = move.normalized() * (run_speed if Input.is_action_pressed("shift") else walk_speed)
 	translation = translation + get_valid_move(move)
 	
 	var initial_transform: Transform = $Character.get_transform()
@@ -32,10 +34,12 @@ func _physics_process(delta) -> void:
 	velocity += gravity * delta 
 	velocity = move_and_slide(velocity)
 	
-	var anim: String = "walk" if move.length() > 0 else "idle"
-	#$Character/AnimationPlayer.play(anim)
-	var state_machine = $Character/AnimationTree["parameters/playback"]
-	state_machine.travel(anim)
+	var anim: String = "idle"
+	if move.length() > 0:
+	  anim = "walk"
+	if anim != "idle" and Input.is_action_pressed("shift"):
+		anim = "run"
+	anim_state_machine.travel(anim)
 
 
 func get_valid_move(move: Vector3) -> Vector3:
