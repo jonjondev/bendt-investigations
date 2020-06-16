@@ -1,6 +1,6 @@
 extends KinematicBody
 
-var walk_speed: float = 0.02
+var walk_speed: float = 0.03
 var run_speed: float = 0.07
 var extent_offset: float = 0.3
 var gravity: Vector3 = Vector3(0, -10, 0)
@@ -31,6 +31,9 @@ func _physics_process(delta) -> void:
 		var rotated_quat: Quat = Quat(initial_transform.basis).slerp(rotated_transform.basis, delta*5)
 		$Character.set_transform(Transform(rotated_quat, initial_transform.origin))
 	
+	#global_transform = 
+	#$RayCasts.global_rotate(Vector3.UP, -$RayCasts.global_transform.basis.get_euler().y)
+	
 	velocity += gravity * delta 
 	velocity = move_and_slide(velocity)
 	
@@ -55,7 +58,8 @@ func get_valid_move(move: Vector3) -> Vector3:
 func is_on_surface(potential_translation: Vector3) -> bool:
 	ray_cast_group.translation = potential_translation
 	for ray in ray_casts:
-		ray.force_raycast_update()
-		if not ray.get_collider():
-			return false
+		if ray is RayCast:
+			ray.force_raycast_update()
+			if not ray.get_collider():
+				return false
 	return true
