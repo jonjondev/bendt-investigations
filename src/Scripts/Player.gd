@@ -2,12 +2,11 @@ extends KinematicBody
 
 var walk_speed: float = 0.03
 var run_speed: float = 0.07
-var extent_offset: float = 0.3
 var gravity: Vector3 = Vector3(0, -10, 0)
 var velocity: Vector3 = Vector3.ZERO
 
-onready var ray_cast_group: Spatial = $RayCasts
-onready var ray_casts: Array = $RayCasts.get_children()
+onready var ray_cast_group: Spatial = $"../RayCasts"
+onready var ray_casts: Array = ray_cast_group.get_children()
 onready var anim_state_machine: AnimationNodeStateMachinePlayback = $Character/AnimationTree["parameters/playback"]
 
 func _physics_process(delta) -> void:
@@ -21,18 +20,16 @@ func _physics_process(delta) -> void:
 	if Input.is_action_pressed("ui_down"):
 		move.z = 1
 	
+	ray_cast_group.translation = translation
 	move = move.normalized() * (run_speed if Input.is_action_pressed("shift") else walk_speed)
 	translation = translation + get_valid_move(move)
 	
-	var initial_transform: Transform = $Character.get_transform()
-	var final_transform: Transform = Transform(initial_transform.basis, $Character.translation + move)
+	var initial_transform: Transform = get_transform()
+	var final_transform: Transform = Transform(initial_transform.basis, translation + move)
 	if initial_transform != final_transform:
 		var rotated_transform: Transform = initial_transform.looking_at(final_transform.origin, Vector3.UP)
 		var rotated_quat: Quat = Quat(initial_transform.basis).slerp(rotated_transform.basis, delta*5)
-		$Character.set_transform(Transform(rotated_quat, initial_transform.origin))
-	
-	#global_transform = 
-	#$RayCasts.global_rotate(Vector3.UP, -$RayCasts.global_transform.basis.get_euler().y)
+		set_transform(Transform(rotated_quat, initial_transform.origin))
 	
 	velocity += gravity * delta 
 	velocity = move_and_slide(velocity)
@@ -46,20 +43,23 @@ func _physics_process(delta) -> void:
 
 
 func get_valid_move(move: Vector3) -> Vector3:
+	var valid_move = Vector3.ZERO
 	if is_on_surface(move):
-		return move
+		valid_move = move
 	elif is_on_surface(Vector3(move.x, 0, 0)):
-		return Vector3(move.x, 0, 0)
+		valid_move = Vector3(move.x, 0, 0)
 	elif is_on_surface(Vector3(0, 0, move.z)):
-		return Vector3(0, 0, move.z)
-	return Vector3.ZERO
+		valid_move = Vector3(0, 0, move.z)
+	return valid_move
 
 
 func is_on_surface(potential_translation: Vector3) -> bool:
-	ray_cast_group.translation = potential_translation
+	ray_cast_group.translation = ray_cast_group.translation + potential_translation
+	var on_surface: bool = true
 	for ray in ray_casts:
-		if ray is RayCast:
-			ray.force_raycast_update()
-			if not ray.get_collider():
-				return false
-	return true
+		ray.force_raycast_update()
+		if not ray.get_collider():
+			on_surface = false
+			break
+	ray_cast_group.translation = ray_cast_group.translation - potential_translation
+	return on_surface
