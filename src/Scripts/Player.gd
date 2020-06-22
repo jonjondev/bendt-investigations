@@ -21,8 +21,8 @@ func _physics_process(delta) -> void:
 		move.z = 1
 	
 	ray_cast_group.translation = translation
-	move = move.normalized() * (run_speed if Input.is_action_pressed("shift") else walk_speed)
-	translation = translation + get_valid_move(move)
+	move = get_valid_move(move.normalized() * (run_speed if Input.is_action_pressed("shift") else walk_speed))
+	translation = translation + move
 	
 	var initial_transform: Transform = get_transform()
 	var final_transform: Transform = Transform(initial_transform.basis, translation + move)
@@ -35,10 +35,11 @@ func _physics_process(delta) -> void:
 	velocity = move_and_slide(velocity)
 	
 	var anim: String = "idle"
-	if move.length() > 0:
-	  anim = "walk"
-	if anim != "idle" and Input.is_action_pressed("shift"):
-		anim = "run"
+	if move != Vector3.ZERO:
+		if move.length() > 0:
+		  anim = "walk"
+		if anim == "walk" and Input.is_action_pressed("shift"):
+			anim = "run"
 	anim_state_machine.travel(anim)
 
 
