@@ -10,6 +10,18 @@ const vec4 rim_colour = vec4(1.0, 1.0, 1.0, 1.0);
 const float rim_size = 0.716;
 const float rim_threshold = 0.8;
 
+uniform float outline_thickness : hint_range(0.0, 1.0, 0.001) = 0.001;
+uniform vec4 outline_color : hint_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+void vertex() {
+	VERTEX = (NORMAL * outline_thickness) + VERTEX;
+}
+
+void fragment()
+{
+	ALBEDO = outline_color.rgb;
+}
+
 void light() {
 	// Get direction of light from current surface normal
 	float n_dot_l = dot(NORMAL, LIGHT);
