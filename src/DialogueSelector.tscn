@@ -1,17 +1,13 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/3DText.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Scripts/DialogueSelector.gd" type="Script" id=2]
 
 [node name="DialogueSelector" type="Spatial"]
+script = ExtResource( 2 )
 
 [node name="3DText" parent="." instance=ExtResource( 1 )]
-transform = Transform( -1.62921e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 1.15202e-07, -1.15202e-07, 0.2, 0, 0 )
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
+visible = false
 text = "First line"
-
-[node name="3DText2" parent="." instance=ExtResource( 1 )]
-transform = Transform( -1.62921e-07, -0.707107, -0.707107, 0, -0.707107, 0.707107, -1, 1.15202e-07, 1.15202e-07, -0.2, 0, 0 )
-text = "Second line"
-
-[node name="3DText3" parent="." instance=ExtResource( 1 )]
-transform = Transform( -1.62921e-07, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -1.62921e-07, 7.12149e-15, 0, -0.2, 0 )
-text = "Third line"
+is_billboard = false

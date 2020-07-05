@@ -1,38 +1,39 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://src/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Scripts/Camera.gd" type="Script" id=2]
 [ext_resource path="res://src/3DText.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/Shaders/ToonShader.shader" type="Shader" id=4]
 [ext_resource path="res://assets/Shaders/ToonOutline.shader" type="Shader" id=5]
+[ext_resource path="res://src/DialogueSelector.tscn" type="PackedScene" id=6]
 
-[sub_resource type="CubeMesh" id=4]
+[sub_resource type="CubeMesh" id=1]
 size = Vector3( 5, 0.2, 5 )
 
-[sub_resource type="BoxShape" id=5]
+[sub_resource type="BoxShape" id=2]
 extents = Vector3( 2.5, 0.1, 2.5 )
 
-[sub_resource type="SphereMesh" id=6]
+[sub_resource type="SphereMesh" id=3]
 radius = 0.5
 height = 1.0
 
-[sub_resource type="ShaderMaterial" id=7]
+[sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 4 )
 shader_param/base_colour = Color( 0.223529, 0.545098, 0.854902, 1 )
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=5]
 shader = ExtResource( 5 )
 shader_param/base_colour = Color( 0.576471, 0, 0.392157, 1 )
 shader_param/outline_thickness = 0.001
 shader_param/outline_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="SpatialMaterial" id=3]
-next_pass = SubResource( 2 )
+[sub_resource type="SpatialMaterial" id=6]
+next_pass = SubResource( 5 )
 flags_unshaded = true
 albedo_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="CubeMesh" id=8]
-material = SubResource( 3 )
+[sub_resource type="CubeMesh" id=7]
+material = SubResource( 6 )
 size = Vector3( 2, 0.1, 0.5 )
 
 [node name="Spatial" type="Spatial"]
@@ -46,44 +47,45 @@ player = NodePath("../PlayerContainer")
 [node name="StaticBody" type="StaticBody" parent="."]
 
 [node name="MeshInstance" type="MeshInstance" parent="StaticBody"]
-mesh = SubResource( 4 )
+mesh = SubResource( 1 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
-shape = SubResource( 5 )
+shape = SubResource( 2 )
 
 [node name="StaticBody2" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.06478, 0, 1.56045 )
 
 [node name="MeshInstance" type="MeshInstance" parent="StaticBody2"]
-mesh = SubResource( 4 )
+mesh = SubResource( 1 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody2"]
-shape = SubResource( 5 )
+shape = SubResource( 2 )
 
 [node name="StaticBody3" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.91451, 0, -1.75616 )
 
 [node name="MeshInstance" type="MeshInstance" parent="StaticBody3"]
-mesh = SubResource( 4 )
+mesh = SubResource( 1 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody3"]
-shape = SubResource( 5 )
+shape = SubResource( 2 )
 
 [node name="StaticBody4" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.91451, 0, 4.0281 )
 
 [node name="MeshInstance" type="MeshInstance" parent="StaticBody4"]
-mesh = SubResource( 4 )
+mesh = SubResource( 1 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody4"]
-shape = SubResource( 5 )
+shape = SubResource( 2 )
 
 [node name="3DText" parent="." instance=ExtResource( 3 )]
 transform = Transform( 2, 0, 0, 0, 1.73205, 0.5, 0, -1, 0.866025, -3.5, 2, 0 )
+visible = false
 text = "some 3d text"
 is_billboard = true
 
@@ -92,15 +94,21 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58416, 0 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.848314, 1.09125, 2.27183 )
-mesh = SubResource( 6 )
-material/0 = SubResource( 7 )
+visible = false
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="."]
 transform = Transform( 0.800261, -0.472636, -0.369051, 0, 0.615441, -0.788183, 0.599652, 0.630752, 0.492514, -2.0097, 1.5543, 2.86691 )
-mesh = SubResource( 8 )
+visible = false
+mesh = SubResource( 7 )
 material/0 = null
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.472766, 0.881188, 0, -0.881188, 0.472766, -2.08938, 4.97888, 4.16298 )
 light_energy = 0.1
 shadow_enabled = true
+
+[node name="DialogueSelector" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.118217, 1.82954, 1.18161 )
+lines = 3
