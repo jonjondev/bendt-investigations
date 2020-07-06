@@ -1,21 +1,21 @@
 extends Spatial
 
-export (int) var lines = 0
+export (int) var faces = 0
 
 var text_scene = preload("res://src/3DText.tscn")
 var texts = []
 
 func _ready():
-	for i in range(lines):
+	var rotation_angle: float = exterior_angles(faces)
+	for i in range(faces):
 		var new_text = text_scene.instance()
-		new_text.text = "Line " + i as String
+		new_text.text = "Line " + str(i)
 		texts.append(new_text)
+		new_text.rotation_degrees = Vector3(i * rotation_angle, 0, 0)
 		add_child(new_text)
-		new_text.rotate_x(i * interior_angles(lines))
 
-func _input(event):
-	if event.is_action("ui_select"):
-		rotate_x(interior_angles(lines))
+func _physics_process(delta):
+	rotate_x(delta * 0.5)
 
-func interior_angles(n: int) -> int:
-	return (n-2)*180/n
+func exterior_angles(n: float) -> float:
+	return 360.0/n

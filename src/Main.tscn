@@ -110,5 +110,4 @@ light_energy = 0.1
 shadow_enabled = true
 
 [node name="DialogueSelector" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.118217, 1.82954, 1.18161 )
-lines = 3
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.118217, 2.27762, 3.93556 )
