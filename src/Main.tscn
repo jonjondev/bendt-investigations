@@ -1,11 +1,10 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Scripts/Camera.gd" type="Script" id=2]
 [ext_resource path="res://src/3DText.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/Shaders/ToonShader.shader" type="Shader" id=4]
 [ext_resource path="res://assets/Shaders/ToonOutline.shader" type="Shader" id=5]
-[ext_resource path="res://src/DialogueSelector.tscn" type="PackedScene" id=6]
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 5, 0.2, 5 )
@@ -108,7 +107,3 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 0.472766, 0.881188, 0, -0.881188, 0.472766, -2.08938, 4.97888, 4.16298 )
 light_energy = 0.1
 shadow_enabled = true
-
-[node name="DialogueSelector" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.118217, 2.74375, 3.93556 )
-faces = 6
