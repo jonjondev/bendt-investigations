@@ -4,6 +4,4 @@
 
 [node name="DialogueSelector" type="Spatial"]
 script = ExtResource( 2 )
-lines = [ "Hello Aryeh", "do not", " be alarmed", "I am talking to you", "through the game" ]
 spacing = 0.06
-scroll_speed = 0.3
