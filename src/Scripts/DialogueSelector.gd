@@ -23,6 +23,8 @@ func _input(event):
 	if Input.is_action_just_pressed("ui_accept"):
 		if not rotate_to:
 			rotate_to = rotation_degrees.x + rotation_angle
+		else:
+			rotate_to = rotate_to + rotation_angle
 
 func _physics_process(delta):
 	if rotate_to != 0:
