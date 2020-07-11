@@ -4,6 +4,7 @@ var walk_speed: float = 0.03
 var run_speed: float = 0.07
 var gravity: Vector3 = Vector3(0, -10, 0)
 var velocity: Vector3 = Vector3.ZERO
+var in_action: bool = false
 
 onready var ray_cast_group: Spatial = $"../RayCasts"
 onready var ray_casts: Array = ray_cast_group.get_children()
@@ -11,19 +12,20 @@ onready var anim_state_machine: AnimationNodeStateMachinePlayback = $Character/A
 
 func _physics_process(delta) -> void:
 	var move: Vector3 = Vector3.ZERO
-	if Input.is_action_pressed("ui_left"):
-		move.x = -1
-	if Input.is_action_pressed("ui_up"):
-		move.z = -1
-	if Input.is_action_pressed("ui_right"):
-		move.x = 1
-	if Input.is_action_pressed("ui_down"):
-		move.z = 1
-	
+	if not in_action:
+		if Input.is_action_pressed("ui_left"):
+			move.x = -1
+		if Input.is_action_pressed("ui_up"):
+			move.z = -1
+		if Input.is_action_pressed("ui_right"):
+			move.x = 1
+		if Input.is_action_pressed("ui_down"):
+			move.z = 1
+		
 	ray_cast_group.translation = translation
 	move = get_valid_move(move.normalized() * (run_speed if Input.is_action_pressed("shift") else walk_speed))
 	translation = translation + move
-	
+		
 	var initial_transform: Transform = get_transform()
 	var final_transform: Transform = Transform(initial_transform.basis, translation + move)
 	if initial_transform != final_transform:
@@ -41,6 +43,10 @@ func _physics_process(delta) -> void:
 		if anim == "walk" and Input.is_action_pressed("shift"):
 			anim = "run"
 	anim_state_machine.travel(anim)
+
+func _input(_event):
+	if Input.is_action_just_pressed("ui_select"):
+		in_action = not in_action
 
 
 func get_valid_move(move: Vector3) -> Vector3:

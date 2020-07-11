@@ -4,4 +4,3 @@
 
 [node name="DialogueSelector" type="Spatial"]
 script = ExtResource( 2 )
-spacing = 0.06
