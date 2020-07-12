@@ -22,6 +22,7 @@ albedo_texture = SubResource( 3 )
 
 [node name="3DText" type="Spatial"]
 script = ExtResource( 2 )
+base_colour = Color( 0.956863, 0.956863, 0.956863, 1 )
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 280, 180 )

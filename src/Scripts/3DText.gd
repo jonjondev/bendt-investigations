@@ -1,9 +1,11 @@
 tool
 extends Spatial
 
+export (Color) var base_colour: Color
 export (String) var text: String setget set_text
 export (bool) var is_billboard: bool
 
+	$Viewport/Control/Label.modulate = base_colour
 func _process(_delta):
 	if is_billboard:
 		var camera: Camera = get_viewport().get_camera()
