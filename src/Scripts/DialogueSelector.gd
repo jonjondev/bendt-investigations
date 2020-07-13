@@ -44,10 +44,11 @@ func _input(_event):
 			move_selection(-1)
 
 func move_selection(direction: int):
-	selected_item = (selected_item + -direction) % lines
-	rotate_to = -text_positions[selected_item]
+	selected_item = (selected_item + direction) % lines
+	if selected_item < 0:
+		selected_item = 3 + selected_item
+	rotate_to = texts.values()[selected_item]
 	rotation_amount = 0
-	print(rotate_to)
 
 func _physics_process(delta):
 	if rotate_to != null:
