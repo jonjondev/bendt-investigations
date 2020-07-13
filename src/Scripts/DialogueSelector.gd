@@ -8,10 +8,10 @@ export (String) var line_2
 export (String) var line_3
 export (float) var spacing = 0.05
 export (float) var scroll_speed = 1.0
+export (Curve) var scroll_curve
 
 var text_scene: PackedScene = preload("res://src/3DText.tscn")
 var text_positions: Array = []
-var curve: Curve = Curve.new()
 var selected_item: int = 0
 var rotation_amount: float = 0
 var rotate_to = null
@@ -28,10 +28,6 @@ func _ready():
 		text_positions.append(i * rotation_angle)
 		new_text.translate(Vector3(0, 0, spacing * (sides/2.0)))
 		add_child(new_text)
-	curve.add_point(Vector2(0.0, 0.0))
-	curve.add_point(Vector2(0.5, 0.2))
-	curve.add_point(Vector2(0.7, 0.9))
-	curve.add_point(Vector2(1.0, 1.0))
 	move_selection(1)
 	rotation_degrees.x = rotate_to
 	rotate_to = null
@@ -52,13 +48,13 @@ func move_selection(direction: int):
 
 func _physics_process(delta):
 	if rotate_to != null:
-		if rotation_amount < 1.0:
-			var new_rotation = rotation_degrees.x + (rotate_to - rotation_degrees.x) * curve.interpolate(rotation_amount)
-			rotation_degrees.x = new_rotation
-			rotation_amount += delta * scroll_speed
-		else:
+		if rotation_amount >= 1.0:
 			rotation_degrees.x = rotate_to
 			rotate_to = null
+		else:
+			var new_rotation = rotation_degrees.x + (rotate_to - rotation_degrees.x) * scroll_curve.interpolate(rotation_amount)
+			rotation_degrees.x = new_rotation
+			rotation_amount += delta * scroll_speed
 
 func exterior_angles(n: float) -> float:
 	return 360.0/n
