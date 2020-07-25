@@ -8,4 +8,4 @@ func _ready():
 
 func on_body_enter(body: Node):
 	if body == player:
-		print("agent entered")
+		body.get_node("../DialogueContainer/DialogueSelector").setup(["test1", "test2", "test3"])

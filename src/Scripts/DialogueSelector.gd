@@ -22,7 +22,17 @@ onready var rotation_angle: float = exterior_angles(sides)
 onready var player: Node = $"../../Player"
 
 func _ready():
-	var text_content: Array = [line_1, line_2, line_3]
+	#setup([line_1, line_2, line_3])
+	pass
+
+func _input(_event):
+	if player.in_action:
+		if Input.is_action_just_pressed("ui_up"):
+			move_selection(1)
+		if Input.is_action_just_pressed("ui_down"):
+			move_selection(-1)
+
+func setup(text_content: Array) -> void:
 	for i in range(lines):
 		var new_text = text_scene.instance()
 		new_text.text = text_content[i]
@@ -33,13 +43,6 @@ func _ready():
 		texts[new_text] = i * rotation_angle - (lines-1) * rotation_angle
 		add_child(new_text)
 	move_selection(0)
-
-func _input(_event):
-	if player.in_action:
-		if Input.is_action_just_pressed("ui_up"):
-			move_selection(1)
-		if Input.is_action_just_pressed("ui_down"):
-			move_selection(-1)
 
 func move_selection(direction: int):
 	selected_item = (selected_item + direction) % lines
