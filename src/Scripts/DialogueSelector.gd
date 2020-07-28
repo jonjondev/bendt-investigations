@@ -22,8 +22,15 @@ onready var rotation_angle: float = exterior_angles(sides)
 onready var player: Node = $"../../Player"
 
 func _ready():
-	#setup([line_1, line_2, line_3])
-	pass
+	for i in range(lines):
+		var new_text = text_scene.instance()
+		new_text.base_colour = text_colour
+		new_text.base_alpha = text_fade
+		new_text.rotation_degrees = Vector3(i * rotation_angle, 0, 0)
+		new_text.translate(Vector3(0, 0, spacing * (sides/2.0)))
+		texts[new_text] = i * rotation_angle - (lines-1) * rotation_angle
+		add_child(new_text)
+	move_selection(0)
 
 func _input(_event):
 	if player.in_action:
@@ -32,17 +39,10 @@ func _input(_event):
 		if Input.is_action_just_pressed("ui_down"):
 			move_selection(-1)
 
-func setup(text_content: Array) -> void:
-	for i in range(lines):
-		var new_text = text_scene.instance()
-		new_text.text = text_content[i]
-		new_text.base_colour = text_colour
-		new_text.base_alpha = text_fade
-		new_text.rotation_degrees = Vector3(i * rotation_angle, 0, 0)
-		new_text.translate(Vector3(0, 0, spacing * (sides/2.0)))
-		texts[new_text] = i * rotation_angle - (lines-1) * rotation_angle
-		add_child(new_text)
-	move_selection(0)
+func display_text(text_content: Array) -> void:
+	var t = texts.keys()
+	for i in range(t.size()):
+		t[i].text = text_content[i]
 
 func move_selection(direction: int):
 	selected_item = (selected_item + direction) % lines
